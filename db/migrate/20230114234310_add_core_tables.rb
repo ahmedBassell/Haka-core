@@ -55,16 +55,14 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.datetime :expires_at
       t.string :location_link
       # we can add prices later
-      t.references :user
+      t.references :created_by, foreign_key: { to_table: :users }, null: false
       t.timestamps
     end
 
     create_table :event_participants do |t|
       t.integer :status, limit: 3, default: 0
-      t.references :user, index: false
-      t.references :event
-      t.index [:event_id, :status]
-      t.index [:event_id, :user_id], unique: true
+      t.references :participant, index: false, foreign_key: { to_table: :users }
+      t.references :event, index: false, foreign_key: { to_table: :events }
     end
 
     create_table :kaha_profiles do |t|
@@ -74,7 +72,7 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.integer :rank, limit: 3, default: 0 # 1 to 5 stars by game master 
       t.integer :priority, limit: 3, default: 0 # for example (enables old hakas can skip waiting lists)
       t.integer :booking_preference, limit: 3, default: 0 # can be (manual booking or automatic weekly booking or bi-weekly automatic booking)
-      t.references :user
+      t.references :player, foreign_key: { to_table: :users }
       t.timestamps
     end
 

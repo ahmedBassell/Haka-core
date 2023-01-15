@@ -8,6 +8,15 @@
 
 owner = ::User.create!(phone:"200", password: "password", display_name: "Zomor", role: ::ROLE_OWNER)
 member = ::User.create!(phone:"201", password: "password", display_name: "Heidi", role: ::ROLE_MEMBER)
+member_kaha_profile = ::KahaProfile.create!(
+  player: member,
+  rank: ::KAHA_PROFILE_RANK_PRO,
+  position: ::KAHA_PROFILE_POSITION_ATTACKER,
+  priority: ::KAHA_PROFILE_PRIORITY_HIGH,
+  booking_preference: ::KAHA_PROFILE_BOOKING_MANUAL,
+  appearances: 100,
+  goals: 28
+)
 date = DateTime.now.utc.to_date.next_occurring(:sunday)
 event = ::Event.create!(
   category: ::EVENT_CATEGORY_KAHA_GAME,
@@ -19,5 +28,10 @@ event = ::Event.create!(
   discarded_at: nil,
   expires_at: nil,
   location_link: "http://maps.google.com/long&lat",
-  user: owner
+  created_by: owner
+)
+participant = ::EventParticipant.create!(
+  event: event,
+  participant: member,
+  status: ::PARTICIPANT_STATUS_WAITING
 )

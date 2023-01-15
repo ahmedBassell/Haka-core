@@ -1,5 +1,5 @@
 class KahaProfile < ApplicationRecord
-  belongs_to :user
+  belongs_to :player, class_name: "User", foreign_key: "player_id"
 
   enum rank: ::KAHA_PROFILE_RANKS_MAP
   enum position: ::KAHA_PROFILES_POSITIONS_MAP
