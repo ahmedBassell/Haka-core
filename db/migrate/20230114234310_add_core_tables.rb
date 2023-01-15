@@ -7,10 +7,13 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.integer :role, default: 0, null: false
       t.integer :gender, limit: 3, default: 0
       t.bigint :hakos, default: 0
+      t.string :display_name, null: false
+      t.string :ig_profile_link
 
       ## Database authenticatable
       t.string :phone,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
+      t.string :email,              default: ""
 
       ## Recoverable
       t.string   :reset_password_token
