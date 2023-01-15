@@ -6,4 +6,7 @@ class User < ApplicationRecord
 
   has_one :kaha_profile
   has_many :events
+  
+  enum role: ::ROLES_MAP
+  enum gender: ::GENDER_MAP
 end
