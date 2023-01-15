@@ -15,10 +15,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "events", id: false, force: :cascade do |t|
-    t.bigint "id", null: false
-    t.uuid "uuid", null: false
-    t.integer "category", null: false
+  create_table "event_participants", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.bigint "user_id"
+    t.bigint "event_id"
+    t.index ["event_id", "status"], name: "index_event_participants_on_event_id_and_status"
+    t.index ["event_id", "user_id"], name: "index_event_participants_on_event_id_and_user_id", unique: true
+    t.index ["event_id"], name: "index_event_participants_on_event_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.integer "category", default: 0, null: false
     t.string "display_name", null: false
     t.string "description", null: false
     t.date "date", null: false
@@ -33,32 +41,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
-  create_table "kaha_profiles", id: false, force: :cascade do |t|
-    t.bigint "id", null: false
-    t.uuid "uuid", null: false
-    t.integer "goals"
-    t.integer "appearances"
-    t.integer "position"
-    t.integer "rank"
-    t.integer "priority"
-    t.integer "booking_preference"
+  create_table "kaha_profiles", force: :cascade do |t|
+    t.integer "goals", default: 0
+    t.integer "appearances", default: 0
+    t.integer "position", default: 0
+    t.integer "rank", default: 0
+    t.integer "priority", default: 0
+    t.integer "booking_preference", default: 0
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_kaha_profiles_on_user_id"
   end
 
-  create_table "users", id: false, force: :cascade do |t|
-    t.bigint "id", null: false
-    t.uuid "uuid", null: false
-    t.integer "role", null: false
-    t.integer "gender"
-    t.bigint "hakos"
-    t.string "phone", null: false
-    t.string "encrypted_password", null: false
+  create_table "users", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.integer "role", default: 0, null: false
+    t.integer "gender", default: 0
+    t.bigint "hakos", default: 0
+    t.string "phone", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer "sign_in_count", null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
@@ -66,11 +72,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.integer "failed_attempts", null: false
+    t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
     t.datetime "locked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end

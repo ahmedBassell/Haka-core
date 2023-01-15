@@ -1,5 +1,5 @@
 class AddCoreTables < ActiveRecord::Migration[7.0]
-  def change
+  def up
     enable_extension "uuid-ossp"
 
     create_table :users do |t|
@@ -56,8 +56,15 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
+    create_table :event_participants do |t|
+      t.integer :status, limit: 3, default: 0
+      t.references :user, index: false
+      t.references :event
+      t.index [:event_id, :status]
+      t.index [:event_id, :user_id], unique: true
+    end
+
     create_table :kaha_profiles do |t|
-      t.uuid :uuid, default: "uuid_generate_v4()", null: false
       t.integer :goals, default: 0
       t.integer :appearances, default: 0
       t.integer :position, limit: 3, default: 0
@@ -69,5 +76,13 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
     end
 
     add_index :users, :reset_password_token, unique: true
+  end
+
+  def down
+    remove_index :users, :reset_password_token
+    drop_table :kaha_profiles
+    drop_table :event_participants
+    drop_table :events
+    drop_table :users
   end
 end
