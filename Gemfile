@@ -38,6 +38,7 @@ gem "rack-cors"
 gem "devise", "~> 4.8.1" # Authentication
 gem "devise-jwt", "~> 0.10.0" # Authenticaiton for API using JWT
 gem 'sorbet-rails'
+gem 'graphql', '~> 2.0', '>= 2.0.17' # GraphQL layer
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
