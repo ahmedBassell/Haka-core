@@ -15,6 +15,31 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
+  create_table "conversation_participants", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "conversation_id"
+    t.index ["conversation_id"], name: "index_conversation_participants_on_conversation_id"
+    t.index ["user_id"], name: "index_conversation_participants_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.integer "conversation_type", default: 0, null: false
+    t.string "display_name", null: false
+    t.datetime "last_message_at"
+    t.datetime "first_message_at"
+    t.datetime "discarded_at"
+    t.bigint "created_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_conversations_on_created_by_id"
+    t.index ["discarded_at"], name: "index_conversations_on_discarded_at"
+  end
+
   create_table "event_participants", force: :cascade do |t|
     t.integer "status", default: 0
     t.bigint "participant_id"
@@ -56,6 +81,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.index ["player_id"], name: "index_kaha_profiles_on_player_id"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.string "source_id"
+    t.integer "message_type", default: 0, null: false
+    t.integer "message_subtype", default: 0, null: false
+    t.string "source_reply_to_message_id"
+    t.integer "source_forward_from_user_id"
+    t.integer "source_forward_from_conversation_id"
+    t.string "source_forward_from_message_id"
+    t.boolean "replied_to", default: false
+    t.boolean "forwarded", default: false
+    t.text "body"
+    t.bigint "user_id"
+    t.bigint "conversation_id"
+    t.datetime "delivered_at"
+    t.datetime "read_at"
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id", "source_id"], name: "index_messages_on_conversation_id_and_source_id", unique: true
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.integer "role", default: 0, null: false
@@ -85,6 +133,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "conversations", "users", column: "created_by_id"
   add_foreign_key "event_participants", "events"
   add_foreign_key "event_participants", "users", column: "participant_id"
   add_foreign_key "events", "users", column: "canceled_by_id"

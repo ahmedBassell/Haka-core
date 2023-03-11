@@ -81,11 +81,57 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
+    create_table :conversations do |t|
+      t.uuid :uuid, default: "uuid_generate_v4()", null: false
+      t.integer :conversation_type, limit: 3, null: false, default: 0
+      t.string :display_name, null: false
+      t.datetime :last_message_at
+      t.datetime :first_message_at
+      t.datetime :discarded_at
+      t.references :created_by, foreign_key: { to_table: :users }, null: false
+      t.timestamps
+
+      t.index :discarded_at
+    end
+
+    create_table :conversation_participants do |t|
+      t.uuid :uuid, default: "uuid_generate_v4()", null: false
+      t.datetime :discarded_at
+      t.timestamps
+      t.references :user, index: true
+      t.references :conversation, index: true
+    end
+
+    create_table :messages do |t|
+      t.uuid :uuid, default: "uuid_generate_v4()", null: false
+      t.string :source_id
+      t.integer :message_type, limit: 3, null: false, default: 0
+      t.integer :message_subtype, limit: 3, null: false, default: 0
+      t.string :source_reply_to_message_id
+      t.integer :source_forward_from_user_id
+      t.integer :source_forward_from_conversation_id
+      t.string :source_forward_from_message_id
+      t.boolean :replied_to, default: false
+      t.boolean :forwarded, default: false
+      t.text :body
+      t.references :user, index: false
+      t.references :conversation, index: true
+      t.datetime :delivered_at
+      t.datetime :read_at
+      t.datetime :discarded_at
+      t.timestamps
+
+      t.index [:conversation_id, :source_id], unique: true
+    end
+
     add_index :users, :reset_password_token, unique: true
   end
 
   def down
     remove_index :users, :reset_password_token
+    drop_table :messages
+    drop_table :conversation_participants
+    drop_table :conversations
     drop_table :kaha_profiles
     drop_table :event_participants
     drop_table :events
