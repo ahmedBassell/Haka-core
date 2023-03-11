@@ -46,11 +46,27 @@ module Events
     end
     def self.cancel!(event_id:, canceled_by:)
       raise ::Users::Errors::Unauthorized unless canceled_by.owner?
-      
+
       event = ::Event.find(event_id)
       raise ::Events::Errors::AlreadyCanceled if event.canceled?
 
       event.update!(canceled_at: ::DateTime.now, canceled_by: canceled_by)
+      event.reload
+    end
+
+    sig do
+      params(
+        event_id: ::Integer,
+        uncanceled_by: ::User
+      ).returns(::Event)
+    end
+    def self.uncancel!(event_id:, uncanceled_by:)
+      raise ::Users::Errors::Unauthorized unless uncanceled_by.owner?
+
+      event = ::Event.find(event_id)
+      raise ::Events::Errors::AlreadyUnCanceled unless event.canceled?
+
+      event.update!(canceled_at: nil, canceled_by: nil)
       event.reload
     end
 

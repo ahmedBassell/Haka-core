@@ -135,19 +135,48 @@ RSpec.describe ::Events::Service do
   end
 
   describe ".uncancel!" do
+    subject do
+      described_class.uncancel!(
+        event_id: event_id,
+        uncanceled_by: user
+      )
+    end
     context "When a member uncancels an event" do
+      let!(:event) { FactoryBot.create(:event, :canceled) }
+      let(:event_id) { event.id }
+      let(:user) { member }
+
+      it_behaves_like "when a member perform unauthorized action"
     end
 
     context "When an owner uncancels an event" do
+      let(:user) { owner }
+
       context "When event is already uncanceled" do
+        let!(:event) { FactoryBot.create(:event) }
+        let(:event_id) { event.id }
       
+        it "Should raise already uncanceled error" do
+          expect{ subject }.to raise_error(::Events::Errors::AlreadyUnCanceled)
+        end
       end
 
       context "When event does not exist" do
-      
+        let(:event_id) { 0 }
+
+        it "Should raise a not found error" do
+          expect{ subject }.to raise_error(::ActiveRecord::RecordNotFound)
+        end
       end
 
-      context "When (happy scenario)" do
+      context "When canceled event exists (happy scenario)" do
+        let!(:event) { FactoryBot.create(:event, :canceled) }
+        let(:event_id) { event.id }
+
+        it "Should update event to be uncanceled" do
+          subject
+          expect(event.reload).not_to be_canceled
+        end
       end
     end
   end
