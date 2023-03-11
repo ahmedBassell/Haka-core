@@ -54,7 +54,8 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.datetime :discarded_at
       t.datetime :expires_at
       t.datetime :canceled_at
-      t.string :location_link
+      t.decimal :longitude, precision: 10, scale: 6
+      t.decimal :latitude, precision: 10, scale: 6
       # we can add prices later
       t.references :created_by, foreign_key: { to_table: :users }, null: false
       t.references :canceled_by, foreign_key: { to_table: :users }, null: true

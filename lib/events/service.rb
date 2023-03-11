@@ -31,12 +31,47 @@ module Events
         to: to,
         discarded_at: nil,
         expires_at: nil,
-        location_link: "",
+        longitude: 0.0,
+        latitude: 0.0,
         created_by: created_by
       )
     end
 
-    def self.update! ; end
+    sig do
+      params(
+        event_id: ::Integer,
+        updated_by: ::User,
+        display_name: ::String,
+        description: ::String,
+        category: ::Events::Models::Enums::CategoryType,
+        date: ::Date,
+        from: ::DateTime,
+        to: ::T.nilable(::DateTime),
+        longitude: ::Float,
+        latitude: ::Float
+      ).returns(::Event)
+    end
+    def self.update!(event_id:, updated_by:, display_name:, description:, category:, date:, from:, to:, longitude:, latitude:)
+      raise ::Users::Errors::Unauthorized unless updated_by.owner?
+      raise ::Events::Errors::InvalidDate unless date > Date.today
+      raise ::Events::Errors::InvalidTime unless to > from
+
+      event = ::Event.find(event_id)
+      raise ::Events::Errors::AlreadyCanceled if event.canceled?
+
+      event.update!(
+        display_name: display_name,
+        description: description,
+        category: category.serialize,
+        date: date,
+        from: from,
+        to: to,
+        longitude: longitude,
+        latitude: latitude
+      )
+
+      event.reload
+    end
 
     sig do
       params(

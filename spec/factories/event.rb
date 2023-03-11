@@ -7,6 +7,8 @@ FactoryBot.define do
     from { DateTime.now }
     to { DateTime.now }
     canceled_at { nil }
+    longitude { 30.0226967 }
+    latitude { 31.4645406 }
     association :created_by, factory: :user
     
     trait :kaha_game do
@@ -15,7 +17,7 @@ FactoryBot.define do
 
     trait :canceled do
       canceled_at { ::DateTime.now }
-      # canceled_by { self.created_by }
+      canceled_by { self.created_by }
     end
   end
 end

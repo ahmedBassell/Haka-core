@@ -32,7 +32,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.datetime "discarded_at"
     t.datetime "expires_at"
     t.datetime "canceled_at"
-    t.string "location_link"
+    t.decimal "longitude", precision: 10, scale: 6
+    t.decimal "latitude", precision: 10, scale: 6
     t.bigint "created_by_id", null: false
     t.bigint "canceled_by_id"
     t.datetime "created_at", null: false
