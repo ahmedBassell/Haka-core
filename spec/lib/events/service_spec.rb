@@ -1,7 +1,16 @@
 RSpec.describe ::Events::Service do
+  let(:member) { FactoryBot.create(:user, :member) }
+  let(:owner) { FactoryBot.create(:user, :owner) }
+
+  shared_examples_for "when a member perform unauthorized action" do
+    let(:user) { member }
+
+    it "Should not allow member to create an event" do
+      expect{ subject }.to raise_error(::Users::Errors::Unauthorized)
+    end
+  end
+
   describe ".create!" do
-    let(:member) { FactoryBot.create(:user, :member) }
-    let(:owner) { FactoryBot.create(:user, :owner) }
     let(:event_name) { "kAHA SUN 8-10 PM" }
     let(:description) { "🤾🤾🤾" }
     let(:category) { ::Events::Models::Enums::CategoryType::KahaGame }
@@ -22,11 +31,7 @@ RSpec.describe ::Events::Service do
     end
 
     context "When a member creates an event" do
-      let(:user) { member }
-
-      it "Should not allow member to create an event" do
-        expect{ subject }.to raise_error(::Users::Errors::Unauthorized)
-      end
+      it_behaves_like "when a member perform unauthorized action"
     end
 
     context "When an owner creates an event" do
@@ -84,19 +89,47 @@ RSpec.describe ::Events::Service do
   end
 
   describe ".cancel!" do
+    subject do
+      described_class.cancel!(
+        event_id: event_id,
+        canceled_by: user
+      )
+    end
+
     context "When a member cancels an event" do
+      let!(:event) { FactoryBot.create(:event) }
+      let(:event_id) { event.id }
+      let(:user) { member }
+
+      it_behaves_like "when a member perform unauthorized action"
     end
 
     context "When an owner cancels an event" do
+      let!(:event) { FactoryBot.create(:event, :canceled) }
+      let(:event_id) { event.id }
+      let(:user) { owner }
+
       context "When event is already canceled" do
-      
+        it "Should raise already canceled error" do
+          expect{ subject }.to raise_error(::Events::Errors::AlreadyCanceled)
+        end
       end
 
       context "When event does not exist" do
-      
+        let(:event_id) { 0 }
+
+        it "Should raise a not found error" do
+          expect{ subject }.to raise_error(::ActiveRecord::RecordNotFound)
+        end
       end
 
-      context "When happy scenario" do
+      context "When event exists (happy scenario)" do
+        let!(:event) { FactoryBot.create(:event) }
+        
+        it "Should update event to be canceled" do
+          subject
+          expect(event.reload).to be_canceled
+        end
       end
     end
   end
@@ -114,20 +147,45 @@ RSpec.describe ::Events::Service do
       
       end
 
-      context "When happy scenario" do
+      context "When (happy scenario)" do
       end
     end
   end
 
   describe ".destroy!" do
+    subject do
+      described_class.destroy!(
+        event_id: event_id,
+        destroyed_by: user
+      )
+    end
+
     context "When a member destroys an event" do
+      let!(:event) { FactoryBot.create(:event) }
+      let(:event_id) { event.id }
+
+      it_behaves_like "when a member perform unauthorized action"
     end
 
     context "When an owner destroys an event" do
+      let(:user) { owner }
+
       context "When event does not exist" do
+        let(:event_id) { 0 }
+
+        it "Should raise a not found error" do
+          expect{ subject }.to raise_error(::ActiveRecord::RecordNotFound)
+        end
       end
 
-      context "When happy scenario" do
+      context "When event exists (happy scenario)" do
+        let!(:event) { FactoryBot.create(:event) }
+        let(:event_id) { event.id }
+
+        it "Should soft delete event" do
+          subject
+          expect(event.reload).to be_discarded
+        end
       end
     end
   end

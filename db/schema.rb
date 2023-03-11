@@ -31,11 +31,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.datetime "to"
     t.datetime "discarded_at"
     t.datetime "expires_at"
+    t.datetime "canceled_at"
     t.string "location_link"
     t.bigint "created_by_id", null: false
+    t.bigint "canceled_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["canceled_by_id"], name: "index_events_on_canceled_by_id"
     t.index ["created_by_id"], name: "index_events_on_created_by_id"
+    t.index ["discarded_at"], name: "index_events_on_discarded_at"
   end
 
   create_table "kaha_profiles", force: :cascade do |t|
@@ -82,6 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
 
   add_foreign_key "event_participants", "events"
   add_foreign_key "event_participants", "users", column: "participant_id"
+  add_foreign_key "events", "users", column: "canceled_by_id"
   add_foreign_key "events", "users", column: "created_by_id"
   add_foreign_key "kaha_profiles", "users", column: "player_id"
 end

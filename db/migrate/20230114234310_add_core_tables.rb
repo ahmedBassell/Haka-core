@@ -53,10 +53,14 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.datetime :to
       t.datetime :discarded_at
       t.datetime :expires_at
+      t.datetime :canceled_at
       t.string :location_link
       # we can add prices later
       t.references :created_by, foreign_key: { to_table: :users }, null: false
+      t.references :canceled_by, foreign_key: { to_table: :users }, null: true
       t.timestamps
+
+      t.index :discarded_at
     end
 
     create_table :event_participants do |t|

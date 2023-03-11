@@ -38,8 +38,34 @@ module Events
 
     def self.update! ; end
 
-    def self.cancel! ; end
+    sig do
+      params(
+        event_id: ::Integer,
+        canceled_by: ::User
+      ).returns(::Event)
+    end
+    def self.cancel!(event_id:, canceled_by:)
+      raise ::Users::Errors::Unauthorized unless canceled_by.owner?
+      
+      event = ::Event.find(event_id)
+      raise ::Events::Errors::AlreadyCanceled if event.canceled?
 
-    def self.destroy! ; end
+      event.update!(canceled_at: ::DateTime.now, canceled_by: canceled_by)
+      event.reload
+    end
+
+    sig do
+      params(
+        event_id: ::Integer,
+        destroyed_by: ::User
+      ).returns(::Event)
+    end
+    def self.destroy!(event_id:, destroyed_by:)
+      raise ::Users::Errors::Unauthorized unless destroyed_by.owner?
+
+      event = ::Event.find(event_id)
+      event.discard!
+      event.reload
+    end
   end
 end
