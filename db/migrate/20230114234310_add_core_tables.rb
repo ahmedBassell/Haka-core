@@ -84,7 +84,7 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
     create_table :conversations do |t|
       t.uuid :uuid, default: "uuid_generate_v4()", null: false
       t.integer :conversation_type, limit: 3, null: false, default: 0
-      t.string :display_name, null: false
+      t.string :display_name, null: true
       t.datetime :last_message_at
       t.datetime :first_message_at
       t.datetime :discarded_at

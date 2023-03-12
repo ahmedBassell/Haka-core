@@ -12,6 +12,9 @@ class User < ApplicationRecord
 
   has_one :kaha_profile
   has_many :events
+  has_many :conversations
+  has_many :participants
+  has_many :messages
   
   enum role: ::ROLES_MAP
   enum gender: ::GENDER_MAP

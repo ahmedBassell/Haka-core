@@ -29,7 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
   create_table "conversations", force: :cascade do |t|
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.integer "conversation_type", default: 0, null: false
-    t.string "display_name", null: false
+    t.string "display_name"
     t.datetime "last_message_at"
     t.datetime "first_message_at"
     t.datetime "discarded_at"
