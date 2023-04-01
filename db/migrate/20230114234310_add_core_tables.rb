@@ -47,6 +47,7 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.timestamps
 
       t.index :email, unique: true
+      t.index :jti, unique: true
     end
 
     create_table :events do |t|
