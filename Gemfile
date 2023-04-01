@@ -35,7 +35,7 @@ gem "bootsnap", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
-gem "devise", "~> 4.8.1" # Authentication
+gem "devise", "~> 4.9.1" # Authentication
 gem "devise-jwt", "~> 0.10.0" # Authenticaiton for API using JWT
 gem 'sorbet-rails'
 gem 'graphql', '~> 2.0', '>= 2.0.17' # GraphQL layer
