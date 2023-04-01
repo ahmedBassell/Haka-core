@@ -7,13 +7,15 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.integer :role, default: 0, null: false
       t.integer :gender, limit: 3, default: 0
       t.bigint :hakos, default: 0
-      t.string :display_name, null: false
+      t.string :display_name
       t.string :ig_profile_link
+      t.integer :provider, limit: 3, default: 0
+      t.string :uid
 
       ## Database authenticatable
-      t.string :phone,              null: false, default: ""
+      t.string :phone,              default: ""
       t.string :encrypted_password, null: false, default: ""
-      t.string :email,              default: ""
+      t.string :email,              null: false, default: ""
 
       ## Recoverable
       t.string   :reset_password_token
@@ -40,7 +42,11 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.string   :unlock_token # Only if unlock strategy is :email or :both
       t.datetime :locked_at
 
+      t.string :jti, null: false
+
       t.timestamps
+
+      t.index :email, unique: true
     end
 
     create_table :events do |t|

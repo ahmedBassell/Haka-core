@@ -109,11 +109,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.integer "role", default: 0, null: false
     t.integer "gender", default: 0
     t.bigint "hakos", default: 0
-    t.string "display_name", null: false
+    t.string "display_name"
     t.string "ig_profile_link"
-    t.string "phone", default: "", null: false
+    t.integer "provider", default: 0
+    t.string "uid"
+    t.string "phone", default: ""
     t.string "encrypted_password", default: "", null: false
-    t.string "email", default: ""
+    t.string "email", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -128,8 +130,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_14_234310) do
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
     t.datetime "locked_at"
+    t.string "jti", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
