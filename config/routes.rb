@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
   post "/graphql", to: "graphql#execute"
-  devise_for :users, defaults: { format: :json }
+  devise_for :users, controllers: { registrations: 'users/registrations' }, defaults: { format: :json }
 end
