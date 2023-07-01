@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_many :conversations
   has_many :participants
   has_many :messages
+  has_one_attached :avatar
   
   enum role: ::ROLES_MAP
   enum gender: ::GENDER_MAP

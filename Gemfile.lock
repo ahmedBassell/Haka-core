@@ -92,6 +92,10 @@ GEM
     diff-lcs (1.5.0)
     discard (1.2.1)
       activerecord (>= 4.2, < 8)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     dry-auto_inject (0.9.0)
       dry-container (>= 0.3.4)
     dry-configurable (0.16.1)
@@ -108,8 +112,12 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    graphiql-rails (1.9.0)
+      railties
+      sprockets-rails
     graphql (2.0.17)
     highline (2.0.3)
     i18n (1.12.0)
@@ -212,6 +220,16 @@ GEM
       rspec-support (~> 3.11)
     rspec-support (3.12.0)
     safe_type (1.1.1)
+    sass-rails (6.0.0)
+      sassc-rails (~> 2.1, >= 2.1.1)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     sorbet-coerce (0.7.0)
       polyfill (~> 1.8)
       safe_type (~> 1.1, >= 1.1.1)
@@ -223,7 +241,15 @@ GEM
       sorbet-coerce (>= 0.2.6)
       sorbet-runtime (>= 0.5.9892)
     sorbet-runtime (0.5.10626)
+    sprockets (4.2.0)
+      concurrent-ruby (~> 1.0)
+      rack (>= 2.2.4, < 4)
+    sprockets-rails (3.4.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
+      sprockets (>= 3.0.0)
     thor (1.2.1)
+    tilt (2.2.0)
     timeout (0.3.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -249,13 +275,16 @@ DEPENDENCIES
   devise (~> 4.9.1)
   devise-jwt (~> 0.10.0)
   discard (~> 1.2)
+  dotenv-rails
   factory_bot_rails
+  graphiql-rails
   graphql (~> 2.0, >= 2.0.17)
   pg (~> 1.1)
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.0)
   rspec-rails
+  sass-rails
   sorbet-rails
   tzinfo-data
 

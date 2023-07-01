@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-owner = ::User.create!(phone:"200", password: "password", display_name: "Zomor", role: ::ROLE_OWNER)
-member = ::User.create!(phone:"201", password: "password", display_name: "Heidi", role: ::ROLE_MEMBER)
+owner = ::User.create!(phone:"200", password: "password", display_name: "Zomor", email: "zomor@haka.io", role: ::ROLE_OWNER)
+member = ::User.create!(phone:"201", password: "password", display_name: "Willy", email: "willy@haka.io", role: ::ROLE_MEMBER)
 member_kaha_profile = ::KahaProfile.create!(
   player: member,
   rank: ::KAHA_PROFILE_RANK_PRO,
@@ -27,7 +27,8 @@ event = ::Event.create!(
   to: date.to_datetime.change(hour: 22),
   discarded_at: nil,
   expires_at: nil,
-  location_link: "http://maps.google.com/long&lat",
+  longitude: 12.0,
+  latitude: 12.0,
   created_by: owner
 )
 participant = ::EventParticipant.create!(
