@@ -23,4 +23,10 @@ class User < ApplicationRecord
   
   enum role: ::ROLES_MAP
   enum gender: ::GENDER_MAP
+
+  def avatar_url
+    return unless avatar.attachment.present?
+
+    avatar.variant(resize_to_limit: [100, 100]).processed.url
+  end
 end

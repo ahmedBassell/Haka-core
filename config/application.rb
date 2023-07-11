@@ -2,6 +2,7 @@ require_relative "boot"
 
 require "rails/all"
 require "sprockets/railtie"
+require "active_storage/engine"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -23,9 +24,15 @@ module Core
     config.autoload_paths << Rails.root.join("lib")
     config.eager_load_paths << Rails.root.join("lib")
 
+    config.autoload_paths += %W(#{config.root}/app/models/active_storage)
+    config.eager_load_paths += %W(#{config.root}/app/models/active_storage)
+
+
     config.session_store :cookie_store, key: '_interslice_session'
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
+
+    config.active_storage.variant_processor = :mini_magick # Active storage variant
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.

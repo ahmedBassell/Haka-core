@@ -31,12 +31,16 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = (ENV["ACTIVE_STORAGE_SERVICE"].presence || "local").to_sym
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.perform_caching = false
+
+  # Added below two lines for activestorage direct uploads
+  config.action_mailer.default_url_options = { :host => "http://192.168.1.5", :port=> 3000 }
+  self.default_url_options = config.action_mailer.default_url_options
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

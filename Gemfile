@@ -41,6 +41,9 @@ gem 'sorbet-rails'
 gem 'graphql', '~> 2.0', '>= 2.0.17' # GraphQL layer
 gem 'discard', '~> 1.2'
 gem 'sass-rails'
+gem "mini_magick"
+gem 'image_processing', '~> 1.9'
+gem "mini_mime", "~> 1.1"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -56,4 +59,3 @@ group :development do
   # gem "spring"
   gem "graphiql-rails"
 end
-

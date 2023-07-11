@@ -7,6 +7,7 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    field :events, [Types::EventType], resolver: Resolvers::EventsResolver, null: false, description: "haka events"
+    field :events, [::Types::EventType], resolver: Resolvers::EventsResolver, null: false, description: "haka events"
+    field :current_user, ::Types::UserType, resolver: Resolvers::CurrentUserResolver, null: false, description: "current user"
   end
 end
