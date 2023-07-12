@@ -13,5 +13,6 @@ module Types
     field :created_by, ::Types::UserType, null: false
     field :created_at, ::Integer, null: false
     field :updated_at, ::Integer, null: false
+    field :images_urls, [::String], null: false
   end
 end
