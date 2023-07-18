@@ -1,7 +1,7 @@
 # typed: ignore
 module Resolvers
   class EventsResolver < BaseResolver
-    type [Types::EventType], null: false
+    type ::Types::EventType.connection_type, null: false
 
     def resolve
       Event.all
