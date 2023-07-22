@@ -108,6 +108,16 @@ def seed_events(owner, member)
       category: ::EVENT_CATEGORY_INTERNATIONAL_ADV,
       scheduled_at: ::DateTime.now(),
       created_at: ::DateTime.now()
+    },
+    {
+      isFullyBooked: false,
+      id: '7',
+      title: 'KAHA Game',
+      description:
+          'Kaha Game',
+      category: ::EVENT_CATEGORY_KAHA_GAME,
+      scheduled_at: ::DateTime.now(),
+      created_at: ::DateTime.now()
     }
   ]
 
