@@ -1,14 +1,14 @@
 # typed: ignore
 module Resolvers
   class EventsResolver < BaseResolver
-    argument :category, ::Types::Enums::Event::CategoryEnum, "event category arg", required: false
+    argument :categories, [::Types::Enums::Event::CategoryEnum], "event categories", required: false
 
     type ::Types::EventType.connection_type, null: false
 
-    def resolve(category:nil)
+    def resolve(categories: [])
       events = Event.all
-      category_klass = ::Events::Models::Enums::CategoryType.from_serialized(category.to_sym)
-      events = events.where(category: category_klass.serialize) if category.present?
+      categories = categories.map{|category| ::Events::Models::Enums::CategoryType.from_serialized(category.to_sym)&.serialize }
+      events = events.where(category: categories) unless categories.empty?
 
       events
     end

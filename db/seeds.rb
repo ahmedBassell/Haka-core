@@ -18,6 +18,8 @@ member_kaha_profile = ::KahaProfile.create!(
   appearances: 100,
   goals: 28
 )
+# owner = ::User.where(role: ::ROLE_OWNER).first
+# member = ::User.where(role: ::ROLE_MEMBER).first
 # date = DateTime.now.utc.to_date.next_occurring(:sunday)
 
 def seed_events(owner, member)
@@ -116,6 +118,16 @@ def seed_events(owner, member)
       description:
           'Kaha Game',
       category: ::EVENT_CATEGORY_KAHA_GAME,
+      scheduled_at: ::DateTime.now(),
+      created_at: ::DateTime.now()
+    },
+    {
+      isFullyBooked: false,
+      id: '8',
+      title: 'KAHA Drill',
+      description:
+          'Kaha Drill',
+      category: ::EVENT_CATEGORY_KAHA_DRILL,
       scheduled_at: ::DateTime.now(),
       created_at: ::DateTime.now()
     }
