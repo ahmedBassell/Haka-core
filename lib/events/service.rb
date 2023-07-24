@@ -118,5 +118,18 @@ module Events
       event.discard!
       event.reload
     end
+
+    sig do
+      params(
+        event_id: ::Integer,
+        participant: ::User
+      ).returns(::Event)
+    end
+    def self.participate!(event_id:, participant:)
+      event = ::Event.find(event_id)
+      ::EventParticipants::Service.create!(event: event, participant: participant)
+
+      event.reload
+    end
   end
 end

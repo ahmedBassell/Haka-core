@@ -14,5 +14,6 @@ module Types
     field :created_at, ::Integer, null: false
     field :updated_at, ::Integer, null: false
     field :images_urls, [::String], null: false
+    field :participants, [::Types::EventParticipantType], null: false
   end
 end
