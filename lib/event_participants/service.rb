@@ -13,7 +13,8 @@ module EventParticipants
       ).returns(::Event)
     end
     def self.create!(event:, participant:)
-      ::EventParticipant.create!(event: event, participant: participant, status: ::PARTICIPANT_STATUS_WAITING)
+      event_participant = ::EventParticipant.find_by(event: event, participant: participant) # Create index on event & participant
+      ::EventParticipant.create!(event: event, participant: participant, status: ::PARTICIPANT_STATUS_WAITING) unless event_participant.present?
 
       event.reload
     end
