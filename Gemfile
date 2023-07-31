@@ -59,3 +59,7 @@ group :development do
   # gem "spring"
   gem "graphiql-rails"
 end
+
+group :test do
+  gem 'database_cleaner'
+end

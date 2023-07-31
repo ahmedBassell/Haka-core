@@ -12,3 +12,10 @@ PARTICIPANT_STATUSES_MAP = T.let(
   },
   T::Hash[::Symbol, ::Integer]
 )
+
+class ParticipantStatusEnum < T::Enum
+  enums do
+    Waiting = new(::PARTICIPANT_STATUS_WAITING)
+    Confirmed = new(::PARTICIPANT_STATUS_CONFIRMED)
+  end
+end

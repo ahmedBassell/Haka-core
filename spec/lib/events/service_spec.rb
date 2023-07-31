@@ -1,3 +1,5 @@
+require "rails_helper"
+
 RSpec.describe ::Events::Service do
   let(:member) { FactoryBot.create(:user, :member) }
   let(:owner) { FactoryBot.create(:user, :owner) }

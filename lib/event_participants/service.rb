@@ -17,5 +17,19 @@ module EventParticipants
 
       event.reload
     end
+
+    sig do
+      params(
+        event_participant: ::EventParticipant,
+        status: ::ParticipantStatusEnum,
+        update_by: ::User
+      ).returns(::EventParticipant)
+    end
+    def self.update_status!(event_participant:, status:, update_by:)
+      raise ::Users::Errors::Unauthorized unless update_by.owner?
+
+      event_participant.update!(status: status.serialize)
+      event_participant.reload
+    end
   end
 end
