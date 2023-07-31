@@ -12,6 +12,7 @@ module Mutations
       def resolve(id:, status:)
         current_user = context[:current_user]
         event_participant = ::EventParticipant.find(id)
+        status = ::ParticipantStatusEnum.from_serialized(status.to_sym)
         event_participant = ::EventParticipants::Service.update_status!(event_participant: event_participant, status: status, update_by: current_user)
         
         { event_participant: event_participant.reload }
