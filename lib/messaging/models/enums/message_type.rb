@@ -8,6 +8,8 @@ module Messaging
         enums do
           Text        = new(::MESSAGE_TEXT_TYPE)
           Image       = new(::MESSAGE_IMAGE_TYPE)
+          Waiting     = new(::MESSAGE_WAITING_TYPE)
+          Confirmed   = new(::MESSAGE_CONFIRMED_TYPE)
           # Video       = new
           # Audio       = new
           # Document    = new

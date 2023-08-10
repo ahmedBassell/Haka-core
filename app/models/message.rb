@@ -4,4 +4,5 @@ class Message < ApplicationRecord
 
   enum message_type: ::MESSAGE_TYPES_MAP
   enum message_subtype: ::MESSAGE_SUBTYPES_MAP
+  enum message_origin_type: ::MESSAGE_ORIGIN_MAP
 end

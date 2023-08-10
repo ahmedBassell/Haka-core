@@ -90,6 +90,7 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
 
     create_table :conversations do |t|
       t.uuid :uuid, default: "uuid_generate_v4()", null: false
+      t.string :source_id, null: false
       t.integer :conversation_type, limit: 3, null: false, default: 0
       t.string :display_name, null: true
       t.datetime :last_message_at
@@ -99,6 +100,7 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.timestamps
 
       t.index :discarded_at
+      t.index :source_id, unique: true
     end
 
     create_table :conversation_participants do |t|
@@ -114,13 +116,14 @@ class AddCoreTables < ActiveRecord::Migration[7.0]
       t.string :source_id
       t.integer :message_type, limit: 3, null: false, default: 0
       t.integer :message_subtype, limit: 3, null: false, default: 0
+      t.integer :message_origin_type, limit: 3, null: false, default: 0
       t.string :source_reply_to_message_id
       t.integer :source_forward_from_user_id
       t.integer :source_forward_from_conversation_id
       t.string :source_forward_from_message_id
       t.boolean :replied_to, default: false
       t.boolean :forwarded, default: false
-      t.text :body
+      t.jsonb :payload
       t.references :user, index: false
       t.references :conversation, index: true
       t.datetime :delivered_at

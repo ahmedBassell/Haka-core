@@ -1,4 +1,4 @@
-module Events
+module Conversations
   module Models
     module Enums
       class ConversationType < T::Enum

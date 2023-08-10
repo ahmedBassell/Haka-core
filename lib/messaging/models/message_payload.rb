@@ -15,7 +15,8 @@ module Messaging
           # ::Messaging::Models::Payloads::VideoBlob,
           # ::Messaging::Models::Payloads::Document,
           # ::Messaging::Models::Payloads::DocumentBlob,
-          # ::Messaging::Models::Payloads::JoinGroup
+          ::Messaging::Models::Payloads::Waiting,
+          ::Messaging::Models::Payloads::Confirmed
         )
       end
   end

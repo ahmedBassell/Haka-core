@@ -56,6 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_01_145433) do
 
   create_table "conversations", force: :cascade do |t|
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
+    t.string "source_id", null: false
     t.integer "conversation_type", default: 0, null: false
     t.string "display_name"
     t.datetime "last_message_at"
@@ -66,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_01_145433) do
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_conversations_on_created_by_id"
     t.index ["discarded_at"], name: "index_conversations_on_discarded_at"
+    t.index ["source_id"], name: "index_conversations_on_source_id", unique: true
   end
 
   create_table "event_participants", force: :cascade do |t|
@@ -114,13 +116,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_01_145433) do
     t.string "source_id"
     t.integer "message_type", default: 0, null: false
     t.integer "message_subtype", default: 0, null: false
+    t.integer "message_origin_type", default: 0, null: false
     t.string "source_reply_to_message_id"
     t.integer "source_forward_from_user_id"
     t.integer "source_forward_from_conversation_id"
     t.string "source_forward_from_message_id"
     t.boolean "replied_to", default: false
     t.boolean "forwarded", default: false
-    t.text "body"
+    t.jsonb "payload"
     t.bigint "user_id"
     t.bigint "conversation_id"
     t.datetime "delivered_at"
