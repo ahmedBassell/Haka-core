@@ -111,6 +111,12 @@ module Conversations
       participants
     end
 
+    sig { params(user: ::User, conversation: ::Conversation).void }
+    def self.validate_conversation_participant!(user, conversation)
+      participant = conversation.participants.find_by(user: user)
+      raise ::Conversations::Errors::UserNotConversationParticipantError unless participant.present?
+    end
+
     private
 
     sig { params( first_user_id: ::Integer, second_user_id: ::Integer ).returns(::String) }

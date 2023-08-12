@@ -1,6 +1,6 @@
-CONVERSATION_ONE_ON_ONE_TYPE  = T.let(:one_on_one, Symbol)
-CONVERSATION_EVENT_GROUP_TYPE = T.let(:event, Symbol)
-CONVERSATION_BROADCAST_TYPE   = T.let(:broadcast, Symbol)
+CONVERSATION_ONE_ON_ONE_TYPE  = T.let(:conversation_one_on_one, Symbol)
+CONVERSATION_EVENT_GROUP_TYPE = T.let(:conversation_group, Symbol)
+CONVERSATION_BROADCAST_TYPE   = T.let(:conversation_broadcast, Symbol)
 
 CONVERSATION_ONE_ON_ONE_TYPE_ID   = T.let(0, ::Integer)
 CONVERSATION_EVENT_GROUP_TYPE_ID  = T.let(1, ::Integer)
