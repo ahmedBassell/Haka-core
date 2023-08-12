@@ -6,7 +6,7 @@ module Messaging
     module Payloads
       class Image < T::Struct
         prop :user, ::User
-        prop :conversation_type, ::Conversations::Models::Enums::ConversationType
+        prop :conversation, ::Conversation
         prop :text, T.nilable(::String)
         prop :url, ::String
         prop :data, T.nilable(StringIO)

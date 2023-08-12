@@ -7,7 +7,7 @@ module Messaging
       class Text < T::Struct
         prop :sender, ::User
         prop :receiver, T.nilable(::User)
-        prop :conversation_type, ::Conversations::Models::Enums::ConversationType
+        prop :conversation, ::Conversation
         prop :text, ::String
         prop :message_type, ::Messaging::Models::Enums::MessageType, default: ::Messaging::Models::Enums::MessageType::Text
         prop :message_subtype, ::Messaging::Models::Enums::MessageSubtype, default: ::Messaging::Models::Enums::MessageSubtype::No_Subtype

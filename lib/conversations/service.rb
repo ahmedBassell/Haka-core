@@ -37,6 +37,20 @@ module Conversations
       raise e
     end
 
+    sig { params( user_one: ::User, user_two: ::User ).returns(::Conversation) }
+    def self.find_or_create_one_on_one_conversation(user_one, user_two)
+      conversation = find_one_on_one(first_user_id: user_one.id, second_user_id: user_two.id)
+
+      if conversation.blank?
+        ::ActiveRecord::Base.transaction do
+          conversation = create_one_on_one!(first_user_id: user_one.id, second_user_id: user_two.id)
+          find_or_create_participants(conversation: conversation, users: [user_one, user_two])
+        end
+      end
+
+      conversation
+    end
+
     # Event Group
 
     sig do
@@ -70,6 +84,31 @@ module Conversations
       return conversation if conversation.present?
 
       raise e
+    end
+
+    sig { params( user: ::User, event: ::Event ).returns(::Conversation) }
+    def self.find_or_create_group_conversation(user, event)
+      conversation = find_group_conversation(user_id: user.id, event_id: event.id)
+      if conversation.blank?
+        ::ActiveRecord::Base.transaction do
+          conversation = create_group_conversation!(user_id: user.id, event_id: event.id)
+          find_or_create_participants(conversation: conversation, users: [user, event.created_by])
+        end
+      end
+
+      conversation
+    end
+
+    # Participants
+    sig { params( conversation: ::Conversation, users: ::T::Array[::User] ).returns(::T::Array[::ConversationParticipant]) }
+    def self.find_or_create_participants(conversation:, users:)
+      participants = []
+      users.each do |user|
+        participant = conversation.participants.find_by(user: user)
+        participants << (participant.present? ? participant : conversation.participants.create!(user: user))
+      end
+
+      participants
     end
 
     private

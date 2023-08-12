@@ -80,18 +80,6 @@ RSpec.describe ::Messaging::Service do
   shared_examples_for "When payload is text message" do
     let(:text_body) { "Hello 👋!" }
     let(:idempotency_key) { "0" }
-    let(:payload) do
-      ::Messaging::Models::Payloads::Text.new(
-        text: text_body,
-        conversation_type: ::Conversations::Models::Enums::ConversationType::OneOnOne,
-        message_type: ::Messaging::Models::Enums::MessageType::Text,
-        message_subtype: ::Messaging::Models::Enums::MessageSubtype::No_Subtype,
-        idempotency_key: idempotency_key,
-        reply_to_message_id: nil,
-        sender: user_one,
-        receiver: user_two
-      )
-    end
 
     it_behaves_like "when conversation does not exist (first message)"
     it_behaves_like "when conversation already exists"
@@ -121,14 +109,6 @@ RSpec.describe ::Messaging::Service do
     let(:user_one) { member }
     let(:user_two) { event.created_by }
     let(:idempotency_key) { "0" }
-    let(:payload) do
-      ::Messaging::Models::Payloads::Waiting.new(
-        conversation_type: ::Conversations::Models::Enums::ConversationType::OneOnOne,
-        user: user_one,
-        event: event,
-        idempotency_key: idempotency_key,
-      )
-    end
 
     it_behaves_like "when conversation does not exist (first message)"
     it_behaves_like "when conversation already exists before waiting message"
@@ -138,7 +118,7 @@ RSpec.describe ::Messaging::Service do
   
   describe ".create_direct_message!" do
     subject do
-      described_class.create_message!(payload: payload)
+      described_class.create_direct_message!(sender: user_one, receiver: user_two, text_body: text_body, idempotency_key: idempotency_key)
     end
 
     context "When sender is owner" do
@@ -179,8 +159,9 @@ RSpec.describe ::Messaging::Service do
 
   # First make user_id polymorphism betweern users and bot users, then change spec to adapt to bot_user_id for message user_id
   describe ".create_system_message!" do
+    let(:message_type) { ::Messaging::Models::Enums::MessageType::Waiting }
     subject do
-      described_class.create_message!(payload: payload)
+      described_class.create_system_message!(user: user_one, event: event, message_type: message_type, idempotency_key: idempotency_key)
     end
 
     context "When waiting system message is created" do

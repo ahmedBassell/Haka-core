@@ -11,6 +11,10 @@ module Messaging
       def create!
         validate!
 
+        message = ::Message.find_by(conversation: payload.conversation, source_id: payload.idempotency_key)
+
+        return message if message.present?
+
         message = create_system_message!(payload: payload)
 
         ::Notifications::Service.notify! if message.present?
@@ -56,8 +60,6 @@ module Messaging
           user: event.created_by, # ??
           conversation: conversation
         )
-      rescue ::ActiveRecord::RecordNotUnique => _
-        nil
       end
       
       sig { params( user_one: ::User, user_two: ::User ).returns(::Conversation) }

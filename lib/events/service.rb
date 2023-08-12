@@ -122,22 +122,21 @@ module Events
     sig do
       params(
         event_id: ::Integer,
-        participant: ::User
+        participant: ::User,
+        idempotency_key: ::String
       ).returns(::Event)
     end
-    def self.participate!(event_id:, participant:)
+    def self.participate!(event_id:, participant:, idempotency_key:)
       event = ::Event.find(event_id)
       ::EventParticipants::Service.create!(event: event, participant: participant)
       
 
       ::ActiveRecord::Base.transaction do
         # Conversation must have type and an identifier, for this case, type = one_on_one, identifier = user_id, creator_id
-        conversation = ::Conversations::Service.find_one_on_one(first_user_id: participant.id, second_user_id: event.created_by_id)
-        if conversation.blank?
-          conversation = ::Conversations::Service.create_one_on_one!(first_user_id: participant.id, second_user_id: event.created_by_id)
-        end
+        conversation = ::Conversations::Service.find_or_create_one_on_one_conversation(participant, event.created_by)
         # Create initial message if not exist with identifier (user id, event creator id, event id, participant status & idempotence_key(mutation_id))
-        ::Messaging::Service.create_waiting_message!(conversation: conversation, event: event, user: participant, idempotency_key: idempotency_key)
+        message_type = ::Messaging::Models::Enums::MessageType::Waiting
+        ::Messaging::Service.create_system_message!(user: participant, event: event, message_type: message_type, idempotency_key: idempotency_key)
         # Check if message exist
       end
       

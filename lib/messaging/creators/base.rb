@@ -24,10 +24,10 @@ module Messaging
 
       sig { void }
       def validate!
-        case payload.conversation_type
-        when ::Conversations::Models::Enums::ConversationType::OneOnOne
-          T.must(payload.receiver) if payload.message_origin_type == ::Messaging::Models::Enums::MessageOriginType::User
-        end
+        # case payload.conversation_type
+        # when ::Conversations::Models::Enums::ConversationType::OneOnOne
+        #   T.must(payload.receiver) if payload.message_origin_type == ::Messaging::Models::Enums::MessageOriginType::User
+        # end
       end
     end
   end
