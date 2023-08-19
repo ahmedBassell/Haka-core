@@ -9,6 +9,8 @@ module Resolvers
       events = Event.all
       categories = categories.map{|category| ::Events::Models::Enums::CategoryType.from_serialized(category.to_sym)&.serialize }
       events = events.where(category: categories) unless categories.empty?
+      # TODO: Add index on events date to sort by it
+      events = events.order(date: :desc)
 
       events
     end

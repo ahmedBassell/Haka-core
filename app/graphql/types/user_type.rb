@@ -9,5 +9,6 @@ module Types
     field :email, ::String, null: false
     field :created_at, ::Integer, null: false
     field :avatar_url, ::String, null: true
+    field :role, ::Types::Enums::User::RoleEnum, null: true
   end
 end

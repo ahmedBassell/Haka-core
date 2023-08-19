@@ -22,19 +22,24 @@ module Events
       raise ::Events::Errors::InvalidDate unless date > Date.today
       raise ::Events::Errors::InvalidTime unless to > from
 
-      ::Event.create!(
-        category: category.serialize,
-        display_name: name,
-        description: description,
-        date: date,
-        from: from,
-        to: to,
-        discarded_at: nil,
-        expires_at: nil,
-        longitude: 0.0,
-        latitude: 0.0,
-        created_by: created_by
-      )
+      ::ActiveRecord::Base.transaction do
+        event = ::Event.create!(
+          category: category.serialize,
+          display_name: name,
+          description: description,
+          date: date,
+          from: from,
+          to: to,
+          discarded_at: nil,
+          expires_at: nil,
+          longitude: 0.0,
+          latitude: 0.0,
+          created_by: created_by
+        )
+        event.images.attach(io: File.open("#{Rails.root}/db/seed_attachments/test.jpg"), filename: 'test.jpg', content_type: 'image/jpg')
+
+        event
+      end      
     end
 
     sig do
