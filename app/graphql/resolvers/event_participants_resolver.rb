@@ -12,7 +12,7 @@ module Resolvers
       participants = ::EventParticipant.includes(:participant)
       participants = participants.includes(:event) if lookahead.selects?(:event)
       participants = participants.where(event_id: event_id) if event_id.present?
-      participants = participants.where(status: statuses) unless statuses.empty?
+      participants = participants.where(status: statuses) if statuses.present?
 
       participants
     end
