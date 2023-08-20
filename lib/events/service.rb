@@ -39,7 +39,8 @@ module Events
         event.images.attach(io: File.open("#{Rails.root}/db/seed_attachments/test.jpg"), filename: 'test.jpg', content_type: 'image/jpg')
 
         event
-      end      
+      end
+      # TODO: Send Notification ?
     end
 
     sig do
